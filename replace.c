@@ -20,7 +20,44 @@
 static size_t replaceAndWrite(const char *pcLine,
                               const char *pcFrom, const char *pcTo)
 {
-   /* Insert your code here. */
+    char *currPoint;
+    size_t fromSize = Str_getLength(pcFrom);
+    size_t replacements = 0;
+
+    assert(pcLine != NULL && pcFrom != NULL && pcTo != NULL);
+    /* Insert your code here. */
+
+    /* TO is blank or FROM doesn't exist */
+    currPoint = Str_search(pcLine, pcFrom);
+    if (pcFrom[0] == '\0' || currPoint == NULL) {
+      printf("%s", pcLine);
+      return 0;
+    } 
+
+    /* move through pcLine till it meets currPoint */
+    while (*pcLine != '\0') {
+
+      /* caught up */
+      if (pcLine == currPoint) {
+        /* write to the output */
+        printf("%s", pcTo);
+
+        /* move pcLine past pcFrom length */
+        pcLine += fromSize;
+
+        /* move currPoint forward to next pcFrom instance */
+        currPoint = Str_search(pcLine, pcFrom);
+        replacements++;
+      }
+
+      /* print everything till we catch up */
+      else {
+        putchar(*pcLine);
+        pcLine++;
+      }
+    }
+    
+    return replacements;
 }
 
 /*--------------------------------------------------------------------*/
@@ -57,6 +94,7 @@ int main(int argc, char *argv[])
 
    while (fgets(acLine, MAX_LINE_SIZE, stdin) != NULL)
       /* Insert your code here. */
+      uReplaceCount += replaceAndWrite(acLine, pcFrom, pcTo);
 
    fprintf(stderr, "%lu replacements\n", (unsigned long)uReplaceCount);
    return 0;
